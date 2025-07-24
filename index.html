@@ -3,115 +3,113 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Thông Báo Rương TikTok</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rương TikTok + Livestream</title>
   <style>
     body {
-      background-color: #000;
+      font-family: Arial, sans-serif;
+      background: #111;
       color: #fff;
-      font-family: 'Arial', sans-serif;
       text-align: center;
-      padding: 40px 20px;
+      padding: 20px;
     }
     .chest-box {
-      background: #111;
-      border: 3px solid #ff0050;
-      border-radius: 20px;
-      padding: 30px;
-      display: inline-block;
-      box-shadow: 0 0 25px #ff0050;
-      animation: pulse 2s infinite;
-      max-width: 400px;
-      width: 90%;
+      background: #222;
+      border: 2px solid #444;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
     }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 10px #ff0050; }
-      50% { box-shadow: 0 0 30px #ff0050; }
-      100% { box-shadow: 0 0 10px #ff0050; }
+    .countdown {
+      font-size: 2rem;
+      margin: 10px 0;
+      color: #0f0;
     }
-    #countdown {
-      font-size: 48px;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    .note, .viewers {
-      margin-top: 12px;
-      font-size: 16px;
+    .viewers {
+      font-size: 1.2rem;
       color: #ccc;
     }
-    .chest-status, .time-left {
-      margin-top: 8px;
-      font-size: 18px;
-      color: #00f0ff;
+    .stream-list {
+      margin-top: 30px;
+      text-align: left;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .viewers span {
-      color: #0ff;
-      font-weight: bold;
+    .stream {
+      background: #1e1e1e;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stream img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .stream span {
+      color: #eee;
     }
   </style>
 </head>
 <body>
 
   <div class="chest-box">
-    <h1>🎁 RƯƠNG <span id="chest-number">1</span> SẮP MỞ!</h1>
-    <div id="countdown">00:00</div>
-    <div class="time-left">⏳ Còn lại: <span id="time-left">--:--</span></div>
-    <div class="chest-status">📦 Rương còn lại: <span id="chests-left">3</span></div>
-    <div class="viewers">👥 Người xem: <span id="viewer-count">123</span></div>
-    <div class="note">Ở lại livestream để nhận thưởng nha!</div>
+    <h1>🎁 Rương TikTok</h1>
+    <div class="countdown" id="timer">Đang tải...</div>
+    <div class="viewers">👁️ <span id="viewerCount">0</span> đang xem</div>
   </div>
 
-  <audio id="chest-sound" src="https://www.myinstants.com/media/sounds/mario-coin.mp3" preload="auto"></audio>
+  <h2>📺 Livestream nổi bật</h2>
+  <div class="stream-list">
+    <div class="stream">
+      <img src="https://i.pravatar.cc/40?img=1">
+      <span>@nguoichoi1 – 🔴 2.3K đang xem</span>
+    </div>
+    <div class="stream">
+      <img src="https://i.pravatar.cc/40?img=2">
+      <span>@gamehot24 – 🔴 1.9K đang xem</span>
+    </div>
+    <div class="stream">
+      <img src="https://i.pravatar.cc/40?img=3">
+      <span>@streamer_xinh – 🔴 3.1K đang xem</span>
+    </div>
+    <div class="stream">
+      <img src="https://i.pravatar.cc/40?img=4">
+      <span>@anhtrangame – 🔴 980 đang xem</span>
+    </div>
+  </div>
 
   <script>
-    const chests = [300, 180, 240];
-    let currentChest = 0;
-    let timeLeft = chests[currentChest];
-
-    const countdownEl = document.getElementById("countdown");
-    const timeLeftEl = document.getElementById("time-left");
-    const chestNumberEl = document.getElementById("chest-number");
-    const chestsLeftEl = document.getElementById("chests-left");
-    const viewerCountEl = document.getElementById("viewer-count");
-    const chestSound = document.getElementById("chest-sound");
-
-    let viewers = 123;
-    setInterval(() => {
-      const delta = Math.floor(Math.random() * 5) - 2;
-      viewers = Math.max(0, viewers + delta);
-      viewerCountEl.textContent = viewers;
-    }, 4000);
+    let duration = 5 * 60;
+    const timerDisplay = document.getElementById("timer");
+    const viewerDisplay = document.getElementById("viewerCount");
 
     function updateCountdown() {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      const formatted = \`\${String(minutes).padStart(2, '0')}:\${String(seconds).padStart(2, '0')}\`;
-      countdownEl.textContent = formatted;
-      timeLeftEl.textContent = \`\${minutes} phút \${seconds} giây\`;
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
+      timerDisplay.textContent = `${minutes} phút ${seconds < 10 ? "0" : ""}${seconds} giây`;
 
-      if (timeLeft > 0) {
-        timeLeft--;
+      if (duration > 0) {
+        duration--;
       } else {
-        chestSound.play();
-        countdownEl.textContent = "🎉 ĐÃ MỞ!";
-        timeLeftEl.textContent = "0 phút 0 giây";
-        setTimeout(() => {
-          currentChest++;
-          if (currentChest < chests.length) {
-            timeLeft = chests[currentChest];
-            chestNumberEl.textContent = currentChest + 1;
-            chestsLeftEl.textContent = chests.length - currentChest;
-          } else {
-            countdownEl.textContent = "✅ TẤT CẢ RƯƠNG ĐÃ MỞ!";
-            timeLeftEl.textContent = "Đã kết thúc 🎁";
-            chestsLeftEl.textContent = "0";
-            clearInterval(interval);
-          }
-        }, 3000);
+        timerDisplay.textContent = "🎉 Rương đã mở!";
+        clearInterval(interval);
+        const audio = new Audio("https://www.myinstants.com/media/sounds/level-up.mp3");
+        audio.play();
       }
     }
 
-    const interval = setInterval(updateCountdown, 1000);
-    updateCountdown();
+    let interval = setInterval(updateCountdown, 1000);
+
+    let viewers = 500 + Math.floor(Math.random() * 300);
+    setInterval(() => {
+      viewers += Math.floor(Math.random() * 10);
+      viewerDisplay.textContent = viewers;
+    }, 1500);
   </script>
 
 </body>
