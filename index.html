@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thông Báo Rương TikTok</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .chest-box {
+      background: #111;
+      border: 3px solid #ff0050;
+      border-radius: 20px;
+      padding: 30px;
+      display: inline-block;
+      box-shadow: 0 0 25px #ff0050;
+      animation: pulse 2s infinite;
+      max-width: 400px;
+      width: 90%;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #ff0050; }
+      50% { box-shadow: 0 0 30px #ff0050; }
+      100% { box-shadow: 0 0 10px #ff0050; }
+    }
+    #countdown {
+      font-size: 48px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .note, .viewers {
+      margin-top: 12px;
+      font-size: 16px;
+      color: #ccc;
+    }
+    .chest-status, .time-left {
+      margin-top: 8px;
+      font-size: 18px;
+      color: #00f0ff;
+    }
+    .viewers span {
+      color: #0ff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chest-box">
+    <h1>🎁 RƯƠNG <span id="chest-number">1</span> SẮP MỞ!</h1>
+    <div id="countdown">00:00</div>
+    <div class="time-left">⏳ Còn lại: <span id="time-left">--:--</span></div>
+    <div class="chest-status">📦 Rương còn lại: <span id="chests-left">3</span></div>
+    <div class="viewers">👥 Người xem: <span id="viewer-count">123</span></div>
+    <div class="note">Ở lại livestream để nhận thưởng nha!</div>
+  </div>
+
+  <audio id="chest-sound" src="https://www.myinstants.com/media/sounds/mario-coin.mp3" preload="auto"></audio>
+
+  <script>
+    const chests = [300, 180, 240];
+    let currentChest = 0;
+    let timeLeft = chests[currentChest];
+
+    const countdownEl = document.getElementById("countdown");
+    const timeLeftEl = document.getElementById("time-left");
+    const chestNumberEl = document.getElementById("chest-number");
+    const chestsLeftEl = document.getElementById("chests-left");
+    const viewerCountEl = document.getElementById("viewer-count");
+    const chestSound = document.getElementById("chest-sound");
+
+    let viewers = 123;
+    setInterval(() => {
+      const delta = Math.floor(Math.random() * 5) - 2;
+      viewers = Math.max(0, viewers + delta);
+      viewerCountEl.textContent = viewers;
+    }, 4000);
+
+    function updateCountdown() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      const formatted = \`\${String(minutes).padStart(2, '0')}:\${String(seconds).padStart(2, '0')}\`;
+      countdownEl.textContent = formatted;
+      timeLeftEl.textContent = \`\${minutes} phút \${seconds} giây\`;
+
+      if (timeLeft > 0) {
+        timeLeft--;
+      } else {
+        chestSound.play();
+        countdownEl.textContent = "🎉 ĐÃ MỞ!";
+        timeLeftEl.textContent = "0 phút 0 giây";
+        setTimeout(() => {
+          currentChest++;
+          if (currentChest < chests.length) {
+            timeLeft = chests[currentChest];
+            chestNumberEl.textContent = currentChest + 1;
+            chestsLeftEl.textContent = chests.length - currentChest;
+          } else {
+            countdownEl.textContent = "✅ TẤT CẢ RƯƠNG ĐÃ MỞ!";
+            timeLeftEl.textContent = "Đã kết thúc 🎁";
+            chestsLeftEl.textContent = "0";
+            clearInterval(interval);
+          }
+        }, 3000);
+      }
+    }
+
+    const interval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+
+</body>
+</html>
